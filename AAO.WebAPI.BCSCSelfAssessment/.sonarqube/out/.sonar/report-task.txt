@@ -1,0 +1,6 @@
+projectKey=AAO-BCSC-SAP--backend
+serverUrl=http://10.0.6.35:9000
+serverVersion=9.9.1.69595
+dashboardUrl=http://10.0.6.35:9000/dashboard?id=AAO-BCSC-SAP--backend
+ceTaskId=AZq6RimWoTJU02fv2CLV
+ceTaskUrl=http://10.0.6.35:9000/api/ce/task?id=AZq6RimWoTJU02fv2CLV

@@ -1,0 +1,1 @@
+Roslyn version: 3.11.0.0Language version: CSharp7_3!Concurrent execution: enabled½¸File 'D:\AAO-Azure\Branches\Main\AAO.WebAPI.BCSCSelfAssessment\AAO.QRREADER.BCSCSelfAssessment\obj\Debug\.NETFramework,Version=v4.6.1.AssemblyAttributes.cs' was recognized as generated

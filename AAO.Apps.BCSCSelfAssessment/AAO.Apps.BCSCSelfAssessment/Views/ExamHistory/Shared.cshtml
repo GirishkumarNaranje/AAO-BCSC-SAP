@@ -1,0 +1,248 @@
+﻿@{
+    ViewBag.Title = "Shared Exams";
+}
+@if (TempData["Msg"] != null)
+{
+    <div class="alert alert-dismissable alert-info">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        @TempData["Msg"].ToString()
+    </div>
+}
+@if (TempData["OptMessage"] != null)
+{
+    <div class="alert alert-dismissable alert-success">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        @TempData["OptMessage"].ToString()
+    </div>
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 xs-nopadding">
+            <ul class="breadcrumb">
+                <li class="active">My Shared Exams</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="exam-history">
+    <div class="col-lg-12 xs-nopadding">
+        <div class="content-bg">
+            <div class="content-padding">
+                <div class="ExamHistoryHeadingDiv">
+                    <div style="display:inline-block" class="marright20"><i class="fa fa-clock-o"></i> Timed</div>
+                    <div style="display:inline-block"><i class="fa fa-flag-checkered"></i> Challenge Mode</div>&nbsp;&nbsp;
+                </div>
+                <div class="grey-font font18 Examhistorystatusdiv">
+                    <select id="Status" name="optionsval" class="form-control form-control-sm">
+                        <option value="0">All</option>
+                        <option value="1">In Progress</option>
+                        <option value="2">Completed</option>
+                    </select>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped" id="ExamHistoryTable">
+                        <thead>
+                            <tr>
+                                <td>Exam Title</td>
+                                <td>Exam Type</td>
+                                <td style="width:120px;">Progress</td>
+                                <td>Score</td>
+                                <td>Start Date</td>
+                                <td>Completion Date</td>
+                                <td>End Date</td>
+                                <td id="es" width="120px">Actions</td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteButton" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                <h3 class="modal-title">Delete Exam</h3>
+            </div>
+            <div class="modal-body">
+                <div class="small martop10">All information from this exam will be deleted from your reports and cumulative performance, including notes and bookmarks.<br /><br />Are you sure you want to permanently delete this exam record?</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary deleted" data-dismiss="modal">Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="location.reload()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Re-Share or Add Users Modal -->
+<div class="modal fade" id="DescModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content message-modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" id="sharedExamClose" class="close message-close" data-dismiss="modal" style="top: 10px;">&times;</button>
+                <h4 class="modal-title">Re-Share or Add Users to Exam</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <!-- Email Input Textarea -->
+                    <label for="emailInput_text">Emails <span class="font-red">*</span></label>
+                    <textarea id="emailInput_text"
+                              class="form-control"
+                              placeholder="Please enter email addresses separated by commas."
+                              rows="4"
+                              style="width: 100%; resize: vertical;"></textarea>
+                    <span id="error" class="text-danger small" style="display: none; margin-top: 5px;">Please enter valid email addresses separated by commas.  Example: user1@example.com, user2@example.com</span>
+                    <span id="error1" class="text-danger small" style="display:none; margin-top: 5px;">Please enter email address.</span>
+                    <small style="color: #666; display: block; margin-top: 5px;">Please enter email addresses of people you want to re-share or add user to this exam with separated by a comma. You can add multiple emails.</small>
+                    <span class="EmailIdSpan error-text" style="display: block; margin-top: 5px;"></span>
+
+                    <!-- Date Range Section -->
+                    <div class="row martop10" style="margin-top: 15px;">
+                        <div class="col-sm-6">
+                            <label for="reshareStart" class="control-label">Start date</label>
+                            <input type="date" id="reshareStart" class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="reshareEnd" class="control-label">End date</label>
+                            <input type="date" id="reshareEnd" class="form-control" />
+                        </div>
+                    </div>
+                    <div id="dateError" class="small" style="color:#d9534f; display:none; margin-top: 6px;"></div>
+
+                    <input type="hidden" name="feedbackexamId" id="feedbackexamId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    @*<button type="button" class="btn btn-primary sharefeedback" data-dismiss="modal">Submit</button>*@
+                    <button type="button" class="btn btn-primary sharefeedback">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Confirmation Modal - exam share-->
+<div class="modal fade" id="shareResultconfirmDialog" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Success</h4>
+            </div>
+            <div class="modal-body">
+                <p>Thank you! Your result has been shared.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal fade" id="shareResultErrorDialog" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Share Result Error</h4>
+            </div>
+            <div class="modal-body">
+                <p> A problem occurred while sharing the result. Please try again.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Duplicate Exam Modal (Already Shared) -->
+<div class="modal fade" id="reshare-duplicate-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#f2dede;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Duplicate Exam found</h4>
+            </div>
+            <div class="modal-body">
+                <p>The following learner(s) have <strong>already been shared</strong> this exam:</p>
+                <ul id="reshare-dup-list" style="margin-left:15px;"></ul>
+                <p class="text-danger" style="margin-top:10px;">Are you sure you wish to assign it to this learner again?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="reshare-dup-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="reshare-dup-proceed" type="button" class="btn btn-danger">Proceed</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Unsubscribed Emails Modal (NEW) -->
+<div class="modal fade" id="unsubscribed-emails-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                @* <div class="modal-header" style="background:#fcf8e3; border-bottom: 1px solid #faebcc;">*@
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                @*<h4 class="modal-title" style="color:  #8a6d3b;">Email(s) Not Subscribed</h4>*@
+                <h4 class="modal-title">Email(s) Not Subscribed</h4>
+            </div>
+            <div class="modal-body">
+                @*<p style="color: #555;">The following email address(es) are <strong>not subscribed</strong> and may not receive the shared exam: </p>*@
+                <p>The following email(s) are not subscribed and will not receive the exam:</p>
+                @*<ul id="unsubscribed-email-list" style="margin-left:15px; color:  #d9534f; font-weight: bold;"></ul>*@
+                <ul id="unsubscribed-email-list" style="margin-left:15px;"></ul>
+                @*<div style="margin-top:15px; padding:  10px; background-color: #fcf8e3; border-left: 4px solid #f0ad4e;">
+                    <strong>Note:</strong> Unsubscribed users may not receive the exam sharing notification email.
+                </div>*@
+            <p style="margin-top:15px;">Do you still want to proceed without sharing the exam with these email addresses?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="unsubscribed-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="unsubscribed-proceed" type="button" class="btn btn-primary">Proceed</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reset Program Modal -->
+<div class="modal fade" id="resetExam" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                <h3 class="modal-title">Reset Program</h3>
+            </div>
+            <div class="modal-body">
+                <div class="small martop10">All exam information will be deleted from your reports and cumulative performance, including notes and bookmarks.<br /><br />Are you sure you want to permanently delete All exam records?</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary deleted" data-dismiss="modal">Reset</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="location.reload()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Indicator -->
+<div id="loader_resetExam" style="display: none;">
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white;">
+            <img src="~/Content/img/Processing.gif" alt="Processing..." />
+            <p>Please wait...</p>
+        </div>
+    </div>
+</div>
+<!--text added for checking pipeline-->
+<script src="@Url.Content("~/Scripts/ExamHistory/SharedExamHistory.js")" type="text/javascript"></script>
+<script src="~/Scripts/moment.min.js"></script>

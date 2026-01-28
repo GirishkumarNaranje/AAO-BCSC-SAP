@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
+  <ProjectName>AAO.DTO.BCSCSelfAssessment</ProjectName>
+  <ProjectLanguage>C#</ProjectLanguage>
+  <ProjectType>Product</ProjectType>
+  <ProjectGuid>777f6f49-b48e-4c5c-b5ce-4a168dc4859d</ProjectGuid>
+  <FullPath>D:\AAO-Azure\Branches\Main\AAO.WebAPI.BCSCSelfAssessment\AAO.DTO.BCSCSelfAssessment\AAO.DTO.BCSCSelfAssessment.csproj</FullPath>
+  <IsExcluded>false</IsExcluded>
+  <AnalysisResults>
+    <AnalysisResult Id="FilesToAnalyze" Location="D:\AAO-Azure\Branches\Main\AAO.Apps.BCSCSelfAssessment\.sonarqube\out\0\FilesToAnalyze.txt" />
+  </AnalysisResults>
+  <AnalysisSettings>
+    <Property Name="sonar.cs.roslyn.reportFilePath">D:\AAO-Azure\Branches\Main\AAO.WebAPI.BCSCSelfAssessment\AAO.DTO.BCSCSelfAssessment\bin\Debug\AAO.DTO.BCSCSelfAssessment.dll.RoslynCA.json|D:\AAO-Azure\Branches\Main\AAO.WebAPI.BCSCSelfAssessment\AAO.DTO.BCSCSelfAssessment\bin\Debug\AAO.DTO.BCSCSelfAssessment.dll.RoslynCA.json</Property>
+    <Property Name="sonar.cs.analyzer.projectOutPath">D:\AAO-Azure\Branches\Main\AAO.Apps.BCSCSelfAssessment\.sonarqube\out\0</Property>
+  </AnalysisSettings>
+  <Configuration>Debug</Configuration>
+  <Platform>AnyCPU</Platform>
+</ProjectInfo>

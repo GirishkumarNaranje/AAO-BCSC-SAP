@@ -1,0 +1,36 @@
+﻿<Dictionary>
+  <Words>
+    <Recognized>
+      <Word>mcid</Word>
+      <Word>sso</Word>
+    </Recognized>
+  </Words>
+  <Acronyms>
+    <CasingExceptions>
+      <Acronym>AAO</Acronym>
+      <Acronym>AAOE</Acronym>
+      <Acronym>MCID</Acronym>
+      <Acronym>BCSC</Acronym>
+      <Acronym>OKAP</Acronym>
+      <Acronym>SSO</Acronym>
+      <Acronym>ISRS</Acronym>
+      <Acronym>AAOOP</Acronym>
+      <Acronym>AAPOS</Acronym>
+      <Acronym>AGS</Acronym>
+      <Acronym>AOS</Acronym>
+      <Acronym>ASORN</Acronym>
+      <Acronym>AUPO</Acronym>
+      <Acronym>AVAO</Acronym>
+      <Acronym>ISER</Acronym>
+      <Acronym>SMCO</Acronym>
+      <Acronym>DOB</Acronym>
+      <Acronym>CME</Acronym>
+      <Acronym>BAL</Acronym>
+      <Acronym>QAS</Acronym>
+      <Acronym>DTO</Acronym>
+      <Acronym>DAL</Acronym>
+      <Acronym>API</Acronym>
+    </CasingExceptions>
+  </Acronyms>
+</Dictionary>
+
