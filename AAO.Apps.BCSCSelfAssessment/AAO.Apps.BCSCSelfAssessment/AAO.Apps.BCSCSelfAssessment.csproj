@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AAO.Apps.BCSCSelfAssessment</RootNamespace>
     <AssemblyName>AAO.Apps.BCSCSelfAssessment</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -815,7 +815,7 @@
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
     <Content Include="Scripts\daterangepicker.js" />
     <Content Include="Scripts\ExamHistory\ExamHistory.js" />
-	<Content Include="Scripts\ExamHistory\SharedExamHistory.js" />
+    <Content Include="Scripts\ExamHistory\SharedExamHistory.js" />
     <Content Include="Scripts\IncorrectAdminReport\IncorrectAdminReport.js" />
     <Content Include="Scripts\IncorrectResidentReport\IncorrectResidentReport.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
