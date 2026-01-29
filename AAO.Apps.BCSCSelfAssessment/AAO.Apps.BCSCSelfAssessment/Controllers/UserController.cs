@@ -104,7 +104,7 @@
             try
             {
                 //Test User AAO12@aao.org
-                userData.MasterCustomerId = "000001010532";
+                /*userData.MasterCustomerId = "000001010532";
                 userData.FirstName = "Education";
                 userData.LastName = "Division";
                 userData.PrimaryEmail = "AAO12@aao.org";
@@ -118,10 +118,10 @@
                 userData.ProgramDirectorProgramId = null;
                 userData.MasterCustomerId = "000001010532";
                 userData.RenewalLink = "";
-                userData.RenewalMessage = "Your subscription expires on Sunday, February 28, 2021.";
+                userData.RenewalMessage = "Your subscription expires on Sunday, February 28, 2021.";*/
 
                 //Test User AAO05@aao.org
-                /*userData.MasterCustomerId = "000001854037";
+                userData.MasterCustomerId = "000001854037";
                 userData.FirstName = "Education";
                 userData.LastName = "Division Test 5";
                 userData.PrimaryEmail = "AAO05@aao.org";
@@ -135,7 +135,24 @@
                 userData.ProgramDirectorProgramId = null;
                 userData.MasterCustomerId = "000001854037";
                 userData.RenewalLink = "";
-                userData.RenewalMessage = "Your subscription expires on Thursday, August 31, 2023.";*/
+                userData.RenewalMessage = "Your subscription expires on Thursday, August 31, 2023.";
+
+                //Test User AAO02@aao.org - Admin
+                /*userData.MasterCustomerId = "000000806053";
+                userData.FirstName = "Education";
+                userData.LastName = "Division";
+                userData.PrimaryEmail = "AAO02@aao.org";
+
+                userData.CommunicationsEmail = "AAO02@aao.org";
+                userData.ResidencyStart = null;
+                userData.ResidencyEnd = null;
+                userData.ResidencyProgramName = null;
+                userData.ResidencyProgramId = null;
+                userData.ProgramDirectorProgramName = null;
+                userData.ProgramDirectorProgramId = null;
+                userData.MasterCustomerId = "000000806053";
+                userData.RenewalLink = "";
+                userData.RenewalMessage = "Your subscription expires on Monday, September 30, 2024.";*/
 
                 HttpCookie cookie = new HttpCookie("BCSC_AAO_MasterCustomerId", userData.MasterCustomerId);
                 cookie.Expires = DateTime.Now.AddDays(cookieExpiry);

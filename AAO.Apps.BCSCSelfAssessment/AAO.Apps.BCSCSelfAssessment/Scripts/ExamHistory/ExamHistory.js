@@ -396,7 +396,7 @@
                         //console.log("todayMoment :", todayMoment);
 
                         // Check if today's date is before exam date (date-only comparison)
-                        if (examDateMoment_sd && todayMoment.isBefore(examDateMoment_sd, 'day')) {
+                        if (examDateMoment_sd && todayMoment.isBefore(examDateMoment_sd, 'day') && !row.IsOriginator) {
                             //console.log("Current date is before exam date");
                             return '<small>Actions available on Start Date</small>';
                         } 
@@ -414,7 +414,7 @@
                         }*/
 
                         if (examDateMoment_ed && todayMoment.isAfter(examDateMoment_ed, 'day')) {
-                            if (!data.IsOriginator) {
+                            if (!row.IsOriginator) {
                                 // non-originator: exam closed
                                 if (data.ExamStatus == 2) {
                                     return '<small>Exam Closed</small> &nbsp; <a href="#" examId=' + data.ExamId + ' class="editAsset marright10" id="share"><i class="fa fa-envelope text-center"></i></a> <a href="#" examId=' + data.ExamId + ' class="editAsset" id="delete";><i class="fa fa-trash-o text-center"></i></a>';
@@ -791,13 +791,13 @@ $('#Status').on('change', function () {
                         //console.log("todayMoment :", todayMoment);
 
                         // Check if today's date is before exam date (date-only comparison)
-                        if (examDateMoment_sd && todayMoment.isBefore(examDateMoment_sd, 'day')) {
+                        if (examDateMoment_sd && todayMoment.isBefore(examDateMoment_sd, 'day') && !row.IsOriginator) {
                             //console.log("Current date is before exam date");
                             return '<small>Actions available on Start Date</small>';
                         }
 
                         if (examDateMoment_ed && todayMoment.isAfter(examDateMoment_ed, 'day')) {
-                            if (!data.IsOriginator) {
+                            if (!row.IsOriginator) {
                                 // non-originator: exam closed
                                 if (data.ExamStatus == 2) {
                                     return '<small>Exam Closed</small> &nbsp; <a href="#" examId=' + data.ExamId + ' class="editAsset marright10" id="share"><i class="fa fa-envelope text-center"></i></a> <a href="#" examId=' + data.ExamId + ' class="editAsset" id="delete";><i class="fa fa-trash-o text-center"></i></a>';

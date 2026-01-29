@@ -695,7 +695,7 @@ $('#ExamHistoryTable tbody').on('click', '#delete', function () {
     function getConfirmation(ExamId) {
         var retVal = $("#deleteButton").modal("show");
         $(".deleted").click(function () {
-            window.location.href = '/ExamHistory/DeleteSharedExamHistoryDetails? ExamId=' + ExamId;
+            window.location.href = '/ExamHistory/DeleteSharedExamHistoryDetails?ExamId='+ExamId;
         });
     }
 });

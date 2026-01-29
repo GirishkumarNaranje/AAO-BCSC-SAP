@@ -147,7 +147,8 @@ function FilterByDate(year, startDate, endDate) {
         },
         "lengthMenu": [[25, 50, 75, 100], [25, 50, 75, 100]],
         "language": {
-            "processing": "<img src='/Content/img/Processing.gif'> Loading...",
+            //"processing": "<img src='/Content/img/Processing.gif'> Loading...",
+            "processing": "<img src='/Content/img/Processing.gif'>",
             "lengthMenu": "Show _MENU_ ",
             "sEmptyTable": "No Records found",
             "info": "Showing _START_ - _END_ of _TOTAL_ entries",

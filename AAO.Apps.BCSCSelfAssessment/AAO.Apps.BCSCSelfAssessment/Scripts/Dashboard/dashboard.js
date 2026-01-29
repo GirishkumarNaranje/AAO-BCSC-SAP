@@ -1,9 +1,4 @@
-﻿//google.charts.load('current', {
-//    callback: DrawCumulativeChart,
-//    packages:['corechart']
-//});
-
-google.charts.load({ packages: ["corechart", "gauge", "table", "timeline", "bar"] });
+﻿google.charts.load({ packages: ["corechart", "gauge", "table", "timeline", "bar"] });
 google.charts.setOnLoadCallback(DrawCumulativeChart);
 
 $(function () {
@@ -230,6 +225,31 @@ $(function () {
                             // compare using UTC (sdUtc, edUtc vs nowUtc), and display the DB calendar date (fmtForSource).
                             // Also generate a robust resumeAttr that uses data-disabled / aria-disabled attributes,
                             // and generate button markup using a class (no duplicate ids).
+
+                            var ExamLastAttemptDate_utc = value.LastAttempedDate;
+                            const [datePart_elad, timePart_elad, period_elad] = ExamLastAttemptDate_utc.split(' ');
+                            const [day_elad, month_elad, year_elad] = datePart_elad.split('-');
+                            const [hours_elad, minutes_elad, seconds_elad] = timePart_elad.split(':');
+
+                            // Convert 12-hour to 24-hour format
+                            let adjustedHours_elad = parseInt(hours_elad);
+                            if (period_elad === 'PM' && adjustedHours_elad !== 12) {
+                                adjustedHours_elad += 12;
+                            } else if (period_elad === 'AM' && adjustedHours_elad === 12) {
+                                adjustedHours_elad = 0;
+                            }
+
+                            // Create date object treating the input as UTC
+                            const utcDateString_elad = `${year_elad}-${month_elad}-${day_elad}T${String(adjustedHours_elad).padStart(2, '0')}:${minutes_elad}:${seconds_elad}Z`;
+                            const date_elad = new Date(utcDateString_elad);
+
+                            // JavaScript automatically converts to local timezone when you use toLocaleDateString
+                            const formattedDate_elad = date_elad.toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                            }).replace(',', '');
+
                             if (value.ExamType == "Shared") {
 
                                 // parse DB start/end as source-day (sourceTz midnight)
@@ -248,60 +268,139 @@ $(function () {
                                 var sdValid = !!sdSource;
                                 var edValid = !!edSource;
 
+                                //START
+                                var dateToFormat_sd = value.ExamStartDate;
+                                var dateToFormat_ed = value.ExamEndDate;
+
+                                var formattedDate_sd, formattedDate_ed, examDateMoment_sd, examDateMoment_ed, todayMoment;
+
+                                if (dateToFormat_sd && dateToFormat_ed)
+                                {
+                                    // Parse DD-MM-YYYY HH:MM:SS format (incoming UTC)
+                                    const [datePart_sd, timePart_sd, period_sd] = dateToFormat_sd.split(' ');
+                                    const [day_sd, month_sd, year_sd] = datePart_sd.split('-');
+                                    const [hours_sd, minutes_sd, seconds_sd] = timePart_sd.split(':');
+
+                                    // Parse DD-MM-YYYY HH:MM:SS format (incoming UTC)
+                                    const [datePart_ed, timePart_ed, period_ed] = dateToFormat_ed.split(' ');
+                                    const [day_ed, month_ed, year_ed] = datePart_ed.split('-');
+                                    const [hours_ed, minutes_ed, seconds_ed] = timePart_ed.split(':');
+
+                                    // Convert 12-hour to 24-hour format
+                                    let adjustedHours_sd = parseInt(hours_sd);
+                                    if (period_sd === 'PM' && adjustedHours_sd !== 12) {
+                                        adjustedHours_sd += 12;
+                                    } else if (period_sd === 'AM' && adjustedHours_sd === 12) {
+                                        adjustedHours_sd = 0;
+                                    }
+
+                                    // Convert 12-hour to 24-hour format
+                                    let adjustedHours_ed = parseInt(hours_ed);
+                                    if (period_ed === 'PM' && adjustedHours_ed !== 12) {
+                                        adjustedHours_ed += 12;
+                                    } else if (period_ed === 'AM' && adjustedHours_ed === 12) {
+                                        adjustedHours_ed = 0;
+                                    }
+
+                                    // Create date object treating the input as UTC
+                                    const utcDateString_sd = `${year_sd}-${month_sd}-${day_sd}T${String(adjustedHours_sd).padStart(2, '0')}:${minutes_sd}:${seconds_sd}Z`;
+                                    const utcDateString_ed = `${year_ed}-${month_ed}-${day_ed}T${String(adjustedHours_ed).padStart(2, '0')}:${minutes_ed}:${seconds_ed}Z`;
+
+                                    const date_sd = new Date(utcDateString_sd);
+                                    const date_ed = new Date(utcDateString_ed);
+
+                                    formattedDate_sd = date_sd.toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric'
+                                    }).replace(',', '');
+
+                                    formattedDate_ed = date_ed.toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric'
+                                    }).replace(',', '');
+
+                                    //console.log("date_sd :", date_sd);
+                                    //console.log("date_ed :", date_ed);
+
+                                    // Create moment objects for date-only comparison
+                                    examDateMoment_sd = moment(date_sd); // Converts to local timezone
+                                    examDateMoment_ed = moment(date_ed); // Converts to local timezone
+
+                                    todayMoment = moment(); // Current date/time in local timezone
+                                }
+                                
+                                //END
+
                                 // Creator sees things without disable (existing logic)
                                 if (LogedInEmail == value.CreatorEmailId) {
-                                    
-                                    //if (value.ExamStartDate || value.ExamEndDate) {
-                                    if (sdValid && edValid) {
-                                        
-                                        if (sdUtc && sdUtc.isAfter(nowUtc, "day")) {
-                                            // Display the DB calendar day to everyone (use fmtForSource)                                            
-                                            displayDate = "Start Date " + fmtForSource(sdSource);
-                                        } else if (edUtc && edUtc.isBefore(nowUtc, "day")) {                                            
-                                            displayDate = "End Date " + fmtForSource(edSource);
+                                    //if (sdValid && edValid) {
+                                    if (dateToFormat_sd && dateToFormat_ed) {   
+                                        //if (sdUtc && sdUtc.isAfter(nowUtc, "day")) {
+                                        if (examDateMoment_sd && todayMoment.isBefore(examDateMoment_sd, 'day')) {
+                                            // Display the DB calendar day to everyone (use fmtForSource)
+                                            //displayDate = "Start Date " + fmtForSource(sdSource);
+                                            displayDate = "Start Date " + formattedDate_sd;
+                                        //} else if (edUtc && edUtc.isBefore(nowUtc, "day")) {                                            
+                                        } else if (examDateMoment_ed && todayMoment.isAfter(examDateMoment_ed, 'day')) {                                            
+                                            //displayDate = "End Date " + fmtForSource(edSource);
+                                            displayDate = "End Date " + formattedDate_ed;
                                         } else if (value.AttempedQuestionCount < 1) {
-                                            displayDate = "Start Date " + fmtForSource(sdSource) + ", Not Started";
-                                        } else if (value.AttempedQuestionCount > 0 && sdUtc && edUtc && !sdUtc.isAfter(nowUtc, "day") && !edUtc.isBefore(nowUtc, "day")) {
-                                            displayDate = "End Date " + fmtForSource(edSource) ;
+                                            //displayDate = "Start Date " + fmtForSource(sdSource) + ", Not Started";
+                                            displayDate = "Start Date " + formattedDate_sd + ", Not Started";
+                                        //} else if (value.AttempedQuestionCount > 0 && examDateMoment_sd && examDateMoment_ed && !todayMoment.isAfter(examDateMoment_sd, 'day') && !todayMoment.isBefore(examDateMoment_ed, 'day')) {
+                                        } else if (value.AttempedQuestionCount > 0) {
+                                            displayDate = "End Date " + formattedDate_ed;
                                         }
                                         else {
-                                            displayDate = "Start Date " + fmtForSource(sdSource);
+                                            //displayDate = "Start Date " + fmtForSource(sdSource);
+                                            displayDate = "Start Date " + formattedDate_sd;
                                         }
                                     } else {
                                         if (value.AttempedQuestionCount <= 0) {
                                             displayDate = "No Expiration, Not Started";
                                         }
                                         else {
-                                            displayDate = "Last attempted on " + (last ? last.format("MMM DD YYYY") : (value.LastAttempedDate || ""));
+                                            //displayDate = "Last attempted on " + (last ? last.format("MMM DD YYYY") : (value.LastAttempedDate || ""));
+                                            displayDate = "Last attempted on " + formattedDate_elad;
                                         }
                                     }
                                 } else {
                                     // Not creator: decide enable/disable
-                                    if (sdValid && edValid) {
-                                        if (sdUtc && sdUtc.isAfter(nowUtc, "day")) {
+                                    //if (sdValid && edValid) {
+                                    if (dateToFormat_sd && dateToFormat_ed) {
+                                        //if (sdUtc && sdUtc.isAfter(nowUtc, "day")) {
+                                        if (examDateMoment_sd && todayMoment.isBefore(examDateMoment_sd, 'day')) {
                                             // not started yet -> disable
                                             //resumeAttr = ' data-disabled="1" aria-disabled="true" title="Exam not yet started" ';
                                             resumeAttr = ' data-disabled="1" aria-disabled="true" disabled title="Exam not yet started" ';
-                                            displayDate = "Start Date " + fmtForSource(sdSource);
-                                        } else if (edUtc && edUtc.isBefore(nowUtc, "day")) {
+                                            //displayDate = "Start Date " + fmtForSource(sdSource);
+                                            displayDate = "Start Date " + formattedDate_sd;
+                                        //} else if (edUtc && edUtc.isBefore(nowUtc, "day")) {
+                                        } else if (examDateMoment_ed && todayMoment.isAfter(examDateMoment_ed, 'day')) {
                                             // ended -> disable
                                             resumeAttr = ' data-disabled="1" aria-disabled="true" disabled title="Exam Closed" ';
-                                            displayDate = "End Date " + fmtForSource(edSource) + ", Exam Closed";
-                                        } else if (value.AttempedQuestionCount > 0 && sdUtc && edUtc && !sdUtc.isAfter(nowUtc, "day") && !edUtc.isBefore(nowUtc, "day")) {
-                                            var last = parseFlexibleToViewer(value.LastAttempedDate);
+                                            displayDate = "End Date " + formattedDate_ed + ", Exam Closed";
+                                        //} else if (value.AttempedQuestionCount > 0 && sdUtc && edUtc && !sdUtc.isAfter(nowUtc, "day") && !edUtc.isBefore(nowUtc, "day")) {
+                                        } else if (value.AttempedQuestionCount > 0) {
+                                            //var last = parseFlexibleToViewer(value.LastAttempedDate);
                                             //displayDate = "Last attempted on " + (last ? last.format("MMM DD YYYY") : (value.LastAttempedDate || ""));
-                                            displayDate = "End Date " + fmtForSource(edSource);
+                                            //displayDate = "End Date " + fmtForSource(edSource);
+                                            displayDate = "End Date " + formattedDate_ed;
                                         } else if (value.AttempedQuestionCount <= 0) {
-                                            displayDate = "Start Date " + fmtForSource(sdSource) + ", Not Started";
+                                            displayDate = "Start Date " + formattedDate_sd + ", Not Started";
                                             resumeAttr = ''; // start today allowed
                                         } else {
-                                            displayDate = "Start Date " + fmtForSource(sdSource);
+                                            //displayDate = "Start Date - " + fmtForSource(sdSource);
+                                            displayDate = "Start Date - " + formattedDate_sd;
                                         }
                                     } else {
                                         // Start/End not both present
                                         if (value.AttempedQuestionCount > 0) {
-                                            var last = parseFlexibleToViewer(value.LastAttempedDate);
-                                            displayDate = "Last attempted on " + (last ? last.format("MMM DD YYYY") : (value.LastAttempedDate || ""));
+                                            //var last = parseFlexibleToViewer(value.LastAttempedDate);
+                                            //displayDate = "Last attempted on " + (last ? last.format("MMM DD YYYY") : (value.LastAttempedDate || ""));
+                                            displayDate = "Last attempted on " + formattedDate_elad;
                                         } else {
                                             displayDate = "No Expiration, Not Started";
                                         }
@@ -311,7 +410,8 @@ $(function () {
                                 // Non-shared exam fallback (unchanged)
                                 if (value.LastAttempedDate && typeof value.LastAttempedDate === 'string' && value.LastAttempedDate.trim() !== "") {
                                     if (value.AttempedQuestionCount > 0) {
-                                        displayDate = "Last attempted on " + value.LastAttempedDate;
+                                        //displayDate = "Last attempted on " + value.LastAttempedDate;
+                                        displayDate = "Last attempted on " + formattedDate_elad;
                                     }
                                     else {
                                         displayDate = "Not Started";
